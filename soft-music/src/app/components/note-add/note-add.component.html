@@ -1,0 +1,40 @@
+<h2>New Note</h2>
+
+<form #noteForm="ngForm" (ngSubmit)="addNote(noteForm)">
+    <div>
+        <label>Title</label><br>
+        <input
+            type="text" 
+            name="title" 
+            [(ngModel)]="newNote().title" 
+            required
+            minlength="3"
+            maxlength="50"
+            #titleRef="ngModel"
+            placeholder="Title">
+        <div *ngIf="submitted && titleRef.invalid" style="color: red;">
+            <small *ngIf="titleRef.errors?.['required']">Title required</small>
+            <small *ngIf="titleRef.errors?.['minlength']">Title min err</small>
+            <small *ngIf="titleRef.errors?.['maxlength']">Title max err</small>
+
+        </div>
+    </div>
+    <div>
+        <label>Content</label><br>
+        <textarea 
+            name="content" 
+            type="textarea" 
+            [(ngModel)]="newNote().content"
+            required
+            minlength="10" 
+            maxlength="100"
+            #contentRef="ngModel"
+            placeholder="Content"></textarea><br>
+        <div *ngIf="submitted && contentRef.invalid" style="color: red;">
+            <small *ngIf="contentRef.errors?.['required']">Content required</small>
+            <small *ngIf="contentRef.errors?.['minlength']">Content min err</small>
+            <small *ngIf="contentRef.errors?.['maxlength']">Content max err</small>
+        </div>
+    </div>
+    <button type="submit">Create</button>
+</form>

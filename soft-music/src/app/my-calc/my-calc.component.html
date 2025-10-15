@@ -1,13 +1,37 @@
 <div class="calculator">
-    <input type="number" class="calculator__input" [(ngModel)]="first" />
-    <select class="calculator__select" [(ngModel)]="operation" >
-        <option [value]="operation" *ngFor="let operation of operations">
-            {{ operation }}
-        </option>
-    </select>
-    <input type="number" class="calculator__input" [(ngModel)]="second" />
+    <ng-container *ngFor="let group of groups">
+        <select class="calculator__select_modifier" [(ngModel)]="group.first.modifier" >
+            <option 
+                [value]="modifier.value" 
+                *ngFor="let modifier of modifiers | keyvalue"
+            >
+                {{ modifier.value }}
+            </option>
+        </select>
+        <input type="number" class="calculator__input OLOLO" [(ngModel)]="group.first.value" />
+        
+        <select class="calculator__select" [(ngModel)]="group.operation" >
+            <option [value]="operation.value" *ngFor="let operation of operations | keyvalue">
+                {{ operation.value }}
+            </option>
+        </select>
+
+        <select class="calculator__select_modifier" [(ngModel)]="group.second.modifier" >
+            <option 
+                [value]="modifier.value" 
+                *ngFor="let modifier of modifiers | keyvalue"
+        >
+                {{ modifier.value }}
+            </option>
+        </select>
+        <input type="number" class="calculator__input" [(ngModel)]="group.second.value" />
+    </ng-container>
     <span class="calculator__result">
         = {{ result ? result : 'Press Calc' }}
     </span>
-    <button (click)="calc()">Calc</button>
+
+    <div>
+        <button (click)="calc()">Calc</button>
+        <button (click)="addGroup()">Add Group</button>
+    </div>
 </div>

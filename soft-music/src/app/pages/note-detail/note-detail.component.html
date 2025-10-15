@@ -1,0 +1,12 @@
+<h2>Details</h2>
+
+<p *ngIf="note">
+    <strong>{{ note.title }}</strong>
+    {{ note.content | noteShortener:20 }}
+    <em>{{ note.createdAt | date:'medium' }}</em>
+</p>
+
+
+<p *ngIf="!note">
+    Note not found
+</p>

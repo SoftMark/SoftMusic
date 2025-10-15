@@ -1,20 +1,34 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MyCalcComponent } from './my-calc/my-calc.component';
+import { CommonModule } from '@angular/common'
+
+import { HeaderComponent } from "./header/header.component";
+import { FooterComponent } from "./footer/footer.component";
+
+
 
 @Component({
   selector: 'app-root',
   imports: [
-    RouterOutlet, 
+    RouterOutlet,
     FormsModule,
     ReactiveFormsModule,
-
-    MyCalcComponent,
-  ],
+    CommonModule,
+    HeaderComponent,
+    FooterComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  
+
   title = 'soft-music';
+
+  handleSubscribe() {
+    console.log('Subscribed!');
+    alert("Subscribed!");
+  }
+  
 }
