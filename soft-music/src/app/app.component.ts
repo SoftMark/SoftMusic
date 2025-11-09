@@ -3,8 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'
 
-import { HeaderComponent } from "./header/header.component";
-import { FooterComponent } from "./footer/footer.component";
+// Study
+// import { HeaderComponent } from "./header/header.component";
+// import { FooterComponent } from "./footer/footer.component";
+
+import { HeaderComponent } from "./v1/compontents/header/header.component";
 
 
 
@@ -15,8 +18,7 @@ import { FooterComponent } from "./footer/footer.component";
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    HeaderComponent,
-    FooterComponent
+    // HeaderComponent,
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

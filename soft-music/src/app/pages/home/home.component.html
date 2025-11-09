@@ -1,8 +1,197 @@
-<h2 (click)="showAlert()">My Notes</h2>
+<!-- <h2 (click)="showAlert()">My Notes</h2>
 <ul>
   <li *ngFor="let note of notes()">
     <a [routerLink]="['/note', note.id]">{{ note.title }}</a>
   </li>
 </ul>
 
-<app-note-add></app-note-add>
+<app-note-add></app-note-add> -->
+<!-- Глобальная тонировка поверх фонового фото -->
+<div class="page-overlay" aria-hidden="true"></div>
+
+<!-- Анимированный туман -->
+<div class="fog" aria-hidden="true">
+  <div class="fog__veil"></div>
+  <div class="fog__layer fog__layer--1"></div>
+  <div class="fog__layer fog__layer--2"></div>
+  <div class="fog__layer fog__layer--3"></div>
+</div>
+
+<section class="hero-visual" role="banner">
+  <div class="hero-inner container hero-center">
+    <div class="brand brand--center">
+      <!-- Логотип лодка-скрипичный ключ (из прошлой версии) -->
+      <svg class="logo" viewBox="0 0 220 96" role="img" aria-label="Soft Music AI logo">
+        <defs>
+          <linearGradient id="clefGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#CFEAEC"/>
+            <stop offset="60%" stop-color="#9FD9DD"/>
+            <stop offset="100%" stop-color="#8FD2D7"/>
+          </linearGradient>
+          <linearGradient id="hullGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#1F5D63"/>
+            <stop offset="100%" stop-color="#0E3A3F"/>
+          </linearGradient>
+          <linearGradient id="rimGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#EAF4F4" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#EAF4F4" stop-opacity="0.15"/>
+          </linearGradient>
+          <linearGradient id="glossGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0"/>
+            <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="ds2" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-color="#0E3A3F" flood-opacity="0.35"/>
+          </filter>
+          <clipPath id="hullClip">
+            <path d="M18 66c36 18 148 18 184 0-7-9-22-15-40-18-12 8-58 11-92 0-18 3-31 9-52 18Z"/>
+          </clipPath>
+        </defs>
+        <g filter="url(#ds2)">
+          <path fill="url(#clefGrad)" stroke="#E7F4F4" stroke-opacity=".55" stroke-width="1.4"
+            d="M118 14c-9.6 0-17.5 7.6-17.5 17 0 6 3.4 10 8.7 12-3.4 2.1-5.6 5.5-5.6 9.6 0 6.7 6.1 12 13.9 12 7.9 0 14.2-5.4 14.2-12.3 0-5.2-3.5-9-8.3-10.7l2.3-21c.2-1.9-1.3-3.6-3.3-3.6h-1.8c-1.7 0-3.2 1.2-3.4 2.9l-2 19c-4.4-1.1-7.3-4-7.3-8.2 0-5 4.7-9.2 10.6-9.2 2.4 0 5 .6 7.5 1.7l2.4-4.7c-3.3-1.6-6.3-2.1-9.4-2.1Zm-.5 40.5c4 0 7 2.5 7 5.9s-3 5.9-7 5.9-7-2.5-7-5.9 3-5.9 7-5.9Z"/>
+        </g>
+        <g filter="url(#ds2)">
+          <path fill="url(#hullGrad)"
+            d="M18 66c36 18 148 18 184 0-7-9-22-15-40-18-12 8-58 11-92 0-18 3-31 9-52 18Z"/>
+          <path d="M26 60c34 10 122 10 170 0" fill="none" stroke="url(#rimGrad)" stroke-width="1.6" stroke-linecap="round" />
+          <path d="M30 68c32 12 120 12 160 0" fill="none" stroke="#FFFFFF" stroke-opacity=".14" stroke-width="1" stroke-linecap="round"/>
+        </g>
+        <g opacity=".55">
+          <path d="M32 78c28 6 112 6 156 0" fill="none" stroke="#CFEAEC" stroke-opacity=".28" stroke-width="1" stroke-linecap="round"/>
+          <path d="M44 83c24 5 100 5 140 0" fill="none" stroke="#CFEAEC" stroke-opacity=".18" stroke-width="1" stroke-linecap="round"/>
+        </g>
+        <g class="gloss" clip-path="url(#hullClip)" style="transform: translateX(-140px);">
+          <rect x="-140" y="40" width="120" height="40" fill="url(#glossGrad)" rx="10"/>
+        </g>
+      </svg>
+
+      <div class="title">
+        <h1>Soft Music AI</h1>
+        <p>Soft vibes for your journey</p>
+      </div>
+    </div>
+
+    <!-- Поиск -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="search-bar" [attr.aria-busy]="loading">
+      <input
+        class="input-lg"
+        type="text"
+        formControlName="q"
+        placeholder="Enter anything you wanted to listen"
+        aria-label="Text prompt"
+      />
+      <button class="btn-icon" type="submit" [disabled]="loading" aria-label="Search">
+        <svg class="icon-search" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5" />
+          <path d="M15.5 15.5 L21 21" />
+        </svg>
+        <span class="visually-hidden">Search</span>
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- Список проигрывателей -->
+<section id="players" #tilesEl class="players-wrap container">
+  <!-- Скелетоны при загрузке -->
+  <div class="skeleton-list" *ngIf="loading" role="status" aria-live="polite" aria-label="Loading recommendations…">
+    <article class="sk-row" *ngFor="let _ of [0,1,2,3,4,5,6,7,8,9]">
+      <div class="sk-cover shimmer"></div>
+      <div class="sk-meta">
+        <div class="sk-line w-60 shimmer"></div>
+        <div class="sk-line w-40 shimmer"></div>
+      </div>
+      <div class="sk-ctrl shimmer"></div>
+    </article>
+  </div>
+
+  <!-- Ошибки/состояния -->
+  <div *ngIf="stateMessage && !loading" [class.state--muted]="stateMuted" class="state">
+    {{ stateMessage }}
+  </div>
+
+  <!-- Результаты как список плееров -->
+  <div class="player-list" role="list" *ngIf="!loading">
+    <article
+      class="player-row"
+      role="listitem"
+      *ngFor="let t of tracks; index as i; trackBy: trackByIdx"
+      [class.is-active]="playingIndex === i"
+    >
+      <!-- Обложка -->
+      <div class="pl-cover">
+        <img [src]="t.coverUrl || placeholderCover" [alt]="t.title + ' — cover'"/>
+      </div>
+
+      <!-- Текст -->
+      <div class="pl-text">
+        <h3 class="pl-title">{{ t.title }}</h3>
+        <div class="pl-meta">
+          <span class="artist">{{ t.artist }}</span>
+          <span class="dot">•</span>
+          <span class="source">YouTube Music</span>
+        </div>
+      </div>
+
+      <!-- Контролы -->
+      <div class="pl-controls">
+        <button
+          class="ctrl-btn"
+          type="button"
+          [disabled]="!t.previewUrl && !fallbackPreview"
+          (click)="toggle(i, audioRef)"
+          [attr.aria-label]="(playingIndex === i ? 'Pause' : 'Play') + ' ' + t.title"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="icon-ctrl">
+            <ng-container *ngIf="playingIndex === i; else playIcon">
+              <rect x="5" y="4" width="5" height="16" rx="1.5"/>
+              <rect x="14" y="4" width="5" height="16" rx="1.5"/>
+            </ng-container>
+            <ng-template #playIcon>
+              <path d="M7 5L19 12L7 19Z" />
+            </ng-template>
+          </svg>
+        </button>
+
+        <!-- Прогресс -->
+        <div class="pl-progress">
+          <span class="time">{{ formatTime(currents[i] || 0) }}</span>
+          <input
+            class="seek"
+            type="range"
+            min="0"
+            [max]="durations[i] || 0"
+            [value]="currents[i] || 0"
+            (input)="seek(i, audioRef, $event)"
+            [disabled]="!(durations[i] > 0)"
+            aria-label="Seek"
+          />
+          <span class="time">{{ formatTime(durations[i] || 0) }}</span>
+        </div>
+
+        <!-- Ссылка в YTM -->
+        <a class="ytm" [href]="t.url" target="_blank" rel="noopener" aria-label="Open in YouTube Music">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="icon-ytm">
+            <path d="M10 8L16 12L10 16V8Z"></path>
+            <rect x="2" y="5" width="20" height="14" rx="4"></rect>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Невидимый audio-элемент -->
+      <audio
+        #audioRef
+        [src]="t.previewUrl || fallbackPreview"
+        (timeupdate)="onTimeUpdate(i, audioRef)"
+        (loadedmetadata)="onLoadedMetadata(i, audioRef)"
+        (ended)="onEnded(i)"
+      ></audio>
+    </article>
+  </div>
+</section>
+
+<footer class="footer container">
+  <small>© Soft Music AI</small>
+</footer>

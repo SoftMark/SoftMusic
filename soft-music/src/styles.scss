@@ -1,4 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Палитра и базовый фон по всему приложению */
+:root {
+    --deep: #0E3A3F;
+    --teal: #1F5D63;
+    --mist: #EAF1F2;
+    --glass: rgba(255, 255, 255, 0.06);
+    --txt: #E7F1F2;
+    --muted: #B8C8CA;
+    --accent: #F0B35A;
+  }
+  
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--txt);
+    background: radial-gradient(1200px 800px at 70% 0%, #17494F 0%, var(--deep) 60%) fixed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Удобный контейнер по всему приложению */
+  .container {
+    width: min(1100px, 92vw);
+    margin: 0 auto;
+  }
+  
+  /* Небольшой reset ссылок в карточках */
+  a { color: inherit; }
