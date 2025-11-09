@@ -3,3 +3,4 @@ asyncio_throttle==1.0.2
 fastapi==0.116.1
 pydantic==2.10.6
 uvicorn==0.33.0
+python-dotenv==1.0.1

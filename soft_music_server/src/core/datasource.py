@@ -1,5 +1,6 @@
 import aiohttp
 import asyncio
+import json
 import typing
 import traceback
 
@@ -21,7 +22,7 @@ class Datasource:
     class Error(BaseException):
         ...
 
-    timeout = aiohttp.ClientTimeout(total=None, sock_read=10)
+    timeout = aiohttp.ClientTimeout(total=None, sock_read=120)
     limit, period = 2, 1  # 2 requests per 1 second
 
     async def __aenter__(self):
@@ -77,10 +78,25 @@ class Datasource:
         """
         while (attempts := attempts - 1) >= 0:
             try:
-                async with self.throttle, self.session.request(method, url, **kwargs) as client_response:
-                    status = client_response.status
-                    content = await getattr(client_response, decode)()
-
+                async with self.throttle, self.session.request(method, url, **kwargs) as resp:
+                    status = resp.status
+                    if decode == 'json':
+                        try:
+                            content = await resp.json(content_type=None)  # ключевая строка
+                        except aiohttp.ContentTypeError:
+                            # Фоллбек: читаем текст и пробуем распарсить вручную
+                            text = await resp.text()
+                            try:
+                                content = json.loads(text)
+                            except json.JSONDecodeError:
+                                content = text  # оставляем как текст, если это не JSON
+                    elif decode == 'text':
+                        content = await resp.text()
+                    elif decode in ('bytes', 'read'):
+                        content = await resp.read()
+                    else:
+                        # на случай, если вы хотите вызвать другой метод aiohttp ответа
+                        content = await getattr(resp, decode)()
                     # response custom validation
                     if not assertion(status, content):
                         raise self.Error('false assertion:', status, content)

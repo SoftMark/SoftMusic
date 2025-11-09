@@ -1,4 +1,5 @@
 import enum
+import os
 
 from src.parsers import ChatGPTResp
 from src.core.datasource import Datasource
@@ -8,7 +9,7 @@ class ChatGPT(Datasource):
     Parser = ChatGPTResp.Parser
     url = 'https://api.openai.com/{tail}'
     # TODO: load from config
-    token = 'GPTToken'
+    token = os.getenv('GPTToken')
 
     class Model(enum.Enum):
         gpt_4o_mini = 'gpt-4o-mini'
